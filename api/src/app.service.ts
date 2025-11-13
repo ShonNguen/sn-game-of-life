@@ -6,9 +6,7 @@ export class AppService {
     return grid.map((row) => row.join(' ')).join('\n');
   }
 
-  generateGrid() {
-    const x = 5;
-    const y = 5;
+  generateGrid(x: number, y: number) {
     const result: number[][] = [];
 
     for (let i = 0; i < x; i++) {
@@ -21,7 +19,7 @@ export class AppService {
 
     //TODO: delete consoles
     const formatted = this.formatGrid(result);
-    console.log(formatted);
+    console.log(`generatedGrid:\n${formatted}`);
 
     return result;
   }
@@ -53,7 +51,7 @@ export class AppService {
 
     //TODO: delete consoles
     const formatted = this.formatGrid(result);
-    console.log(formatted);
+    console.log(`generateExpansion:\n${formatted}`);
 
     return result;
   }
@@ -64,27 +62,18 @@ export class AppService {
     // 3. Any live cell with more than three live neighbors dies, as if by overpopulation.
     // 4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
     const cellValue = grid[cellX][cellY];
-    if (cellX === 0 || cellY === 0) {
-      return cellValue;
-    }
 
     // calculate the sum of all neighbors
     let sum = 0;
-    const directions = [
-      [-1, -1],
-      [-1, 0],
-      [-1, 1],
-      [0, -1],
-      [0, 1],
-      [1, -1],
-      [1, 0],
-      [1, 1],
-    ];
-
-    for (const [dx, dy] of directions) {
-      const nx = cellX + dx;
-      const ny = cellY + dy;
-      sum += grid[nx][ny];
+    const numRows = grid.length;
+    const numCols = grid[0].length;
+    for (let x = cellX - 1; x <= cellX + 1; x++) {
+      for (let y = cellY - 1; y <= cellY + 1; y++) {
+        if (x === cellX && y === cellY) continue;
+        if (x >= 0 && x < numRows && y >= 0 && y < numCols) {
+          sum += grid[x][y];
+        }
+      }
     }
 
     if (sum === 3) {
@@ -123,7 +112,7 @@ export class AppService {
     for (let i = 0; i < x; i++) {
       const newRow: number[] = [];
       for (let j = 0; j < y; j++) {
-        const newCellValue = this.cellEvaluation(i, j, grid);
+        const newCellValue = this.cellEvaluation(i, j, originalGrid);
         newRow.push(newCellValue);
       }
       nextGrid.push(newRow);
@@ -131,7 +120,7 @@ export class AppService {
 
     //TODO: delete consoles
     const formatted = this.formatGrid(nextGrid);
-    console.log(formatted);
+    console.log(`Generation:\n${formatted}`);
 
     return nextGrid;
   }
