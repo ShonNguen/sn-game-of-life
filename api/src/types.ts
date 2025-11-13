@@ -1,0 +1,1 @@
+export type LiveOrDead = 0 | 1;
