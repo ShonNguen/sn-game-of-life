@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -15,7 +15,7 @@ export class AppController {
   @Post('next')
   nextGeneration(@Body() body: { grid: number[][] }) {
     if (!body.grid) {
-      throw new BadRequestException('Missing grid in body');
+      throw new BadRequestException('Missing grid in request body');
     }
 
     const next = this.appService.nextGeneration(body.grid);

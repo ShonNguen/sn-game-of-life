@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
+  //TODO: move to utils?
   formatGrid(grid: number[][]) {
     return grid.map((row) => row.join(' ')).join('\n');
   }
@@ -56,6 +57,7 @@ export class AppService {
     return result;
   }
 
+  //TODO: move to utils?
   cellEvaluation(cellX: number, cellY: number, grid: number[][]) {
     // 1. Any live cell with fewer than two live neighbors dies, as if by under-population
     // 2. Any live cell with two or three live neighbors lives on to the next generation.
@@ -87,6 +89,7 @@ export class AppService {
     return 0;
   }
 
+  //TODO: move to utils?
   shouldExpand(grid: number[][]): boolean {
     const lastRow = grid.length - 1;
     const lastCol = grid[0].length - 1;
