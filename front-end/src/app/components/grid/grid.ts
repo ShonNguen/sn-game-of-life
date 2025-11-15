@@ -22,8 +22,8 @@ export class Grid {
 
   get gridStyles() {
     return {
-      'grid-template-columns': `repeat(${this.cols}, 30px)`,
-      'grid-template-rows': `repeat(${this.rows}, 30px)`,
+      'grid-template-columns': `repeat(${this.cols}, 5px)`,
+      'grid-template-rows': `repeat(${this.rows}, 5px)`,
     };
   }
 

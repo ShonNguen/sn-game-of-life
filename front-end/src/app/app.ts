@@ -2,10 +2,11 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Grid } from './components/grid/grid';
 import { ButtonComponent } from './components/button/button';
+import { NavbarComponent } from './components/navbar/navbar';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, Grid, ButtonComponent],
+  imports: [CommonModule, Grid, ButtonComponent, NavbarComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

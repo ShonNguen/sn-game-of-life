@@ -1,4 +1,4 @@
-<app-button label="Start" (clicked)="onResetGrid()" />
-<app-button label="Next generation" (clicked)="onNextGeneration()" />
-<app-grid />
-
+<app-navbar (resetGrid)="onResetGrid()" (nextGeneration)="onNextGeneration()"></app-navbar>
+<main class="content">
+  <app-grid />
+</main>
