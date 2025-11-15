@@ -1,0 +1,20 @@
+.grid-container {
+  display: grid;
+  gap: 1px;
+  margin: 20px auto;
+}
+
+.grid-row {
+  display: contents;
+}
+
+.grid-cell {
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.grid-cell.alive {
+  background-color: #000;
+}
