@@ -7,8 +7,8 @@ import { inject, Injectable } from '@angular/core';
 export class HttpService {
   http = inject(HttpClient);
 
-  getGeneratedGrid() {
-    const url = 'http://localhost:3000/grid?row=20&col=20';
+  getGeneratedGrid(rows: number, cols: number) {
+    const url = `http://localhost:3000/grid?row=${rows}&col=${cols}`;
     return this.http.get<Array<Array<number>>>(url);
   }
 

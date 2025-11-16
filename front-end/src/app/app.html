@@ -2,3 +2,8 @@
 <main class="content">
   <app-grid />
 </main>
+<app-modal
+  *ngIf="isModalVisible()"
+  (closeModal)="onCloseModal()"
+  (submitModal)="onGridDimensionsChange($event)"
+></app-modal>

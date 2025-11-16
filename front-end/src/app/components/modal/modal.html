@@ -1,0 +1,18 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Set Grid Dimensions</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="rows">Rows:</label>
+        <input type="number" id="rows" name="rows" [(ngModel)]="rows" required />
+      </div>
+      <div class="form-group">
+        <label for="cols">Columns:</label>
+        <input type="number" id="cols" name="cols" [(ngModel)]="cols" required />
+      </div>
+      <div class="modal-actions">
+        <app-button type="submit" label="Apply" (clicked)="onSubmit()" />
+      </div>
+    </form>
+  </div>
+</div>

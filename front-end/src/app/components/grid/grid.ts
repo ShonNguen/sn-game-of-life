@@ -13,11 +13,11 @@ export class Grid {
   grid = signal<Array<Array<number>>>([]);
   httpService = inject(HttpService);
 
-  rows = 0;
-  cols = 0;
+  rows = 50;
+  cols = 50;
 
   constructor() {
-    this.initializeGrid();
+    this.initializeGrid(this.rows, this.cols);
   }
 
   get gridStyles() {
@@ -27,9 +27,11 @@ export class Grid {
     };
   }
 
-  initializeGrid(): void {
+  initializeGrid(rows: number, cols: number): void {
+    this.rows = rows;
+    this.cols = cols;
     this.httpService
-      .getGeneratedGrid()
+      .getGeneratedGrid(rows, cols)
       .pipe(
         catchError((err) => {
           console.error('Failed to generate grid, error: ', err);
@@ -37,8 +39,6 @@ export class Grid {
         })
       )
       .subscribe((data: number[][]) => {
-        this.rows = data.length;
-        this.cols = data[0].length;
         this.grid.set(data);
       });
   }

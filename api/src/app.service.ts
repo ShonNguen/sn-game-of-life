@@ -2,11 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  //TODO: move to utils?
-  formatGrid(grid: number[][]) {
-    return grid.map((row) => row.join(' ')).join('\n');
-  }
-
   generateGrid(x: number, y: number) {
     const result: number[][] = [];
 
@@ -17,10 +12,6 @@ export class AppService {
       }
       result.push(row);
     }
-
-    //TODO: delete consoles
-    const formatted = this.formatGrid(result);
-    console.log(`generatedGrid:\n${formatted}`);
 
     return result;
   }
@@ -49,10 +40,6 @@ export class AppService {
       }
       result.push(row);
     }
-
-    //TODO: delete consoles
-    const formatted = this.formatGrid(result);
-    console.log(`generateExpansion:\n${formatted}`);
 
     return result;
   }
@@ -120,10 +107,6 @@ export class AppService {
       }
       nextGrid.push(newRow);
     }
-
-    //TODO: delete consoles
-    const formatted = this.formatGrid(nextGrid);
-    console.log(`Generation:\n${formatted}`);
 
     return nextGrid;
   }
