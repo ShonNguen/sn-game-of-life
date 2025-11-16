@@ -5,5 +5,7 @@
   <div class="navbar-buttons">
     <app-button label="Reset" (clicked)="onResetGrid()" />
     <app-button label="Next generation" (clicked)="onNextGeneration()" />
+    <app-button *ngIf="!isRunning" label="Run" (clicked)="onRun()" />
+    <app-button *ngIf="isRunning" label="Stop" variant="Alert" (clicked)="onStop()" />
   </div>
 </nav>

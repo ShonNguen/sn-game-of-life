@@ -19,13 +19,28 @@ export class App {
   @ViewChild(Grid) gridComponent!: Grid;
 
   isModalVisible = signal(false);
+  isRunning = signal(false);
+  private intervalId: number | undefined;
 
   onResetGrid(): void {
     this.isModalVisible.set(true);
+    this.onStop();
   }
 
   onNextGeneration(): void {
     this.gridComponent.nextGeneration();
+  }
+
+  onRun(): void {
+    this.isRunning.set(true);
+    this.intervalId = setInterval(() => {
+      this.gridComponent.nextGeneration();
+    }, 500);
+  }
+
+  onStop(): void {
+    this.isRunning.set(false);
+    clearInterval(this.intervalId);
   }
 
   onCloseModal(): void {

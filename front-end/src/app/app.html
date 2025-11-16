@@ -1,4 +1,10 @@
-<app-navbar (resetGrid)="onResetGrid()" (nextGeneration)="onNextGeneration()"></app-navbar>
+<app-navbar
+  [isRunning]="isRunning()"
+  (resetGrid)="onResetGrid()"
+  (nextGeneration)="onNextGeneration()"
+  (run)="onRun()"
+  (stop)="onStop()"
+></app-navbar>
 <main class="content">
   <app-grid />
 </main>

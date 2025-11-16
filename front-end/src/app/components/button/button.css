@@ -1,6 +1,4 @@
-button {
-  background-color: #007bff;
-  color: white;
+.btn {
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -8,12 +6,31 @@ button {
   font-size: 16px;
   margin-left: 4px;
   margin-right: 4px;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
+.btn.Main {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn.Main:hover {
   background-color: #0056b3;
 }
 
-button:active {
+.btn.Main:active {
   background-color: #004085;
+}
+
+.btn.Alert {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn.Alert:hover {
+  background-color: #c82333;
+}
+
+.btn.Alert:active {
+  background-color: #bd2130;
 }
