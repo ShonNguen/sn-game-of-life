@@ -1,9 +1,1 @@
-<div class="grid-container" [ngStyle]="gridStyles">
-  <div *ngFor="let row of grid(); let i = index" class="grid-row">
-    <div
-      *ngFor="let cell of row; let j = index"
-      class="grid-cell"
-      [class.alive]="cell === 1"
-    ></div>
-  </div>
-</div>
+<canvas #gridCanvas></canvas>

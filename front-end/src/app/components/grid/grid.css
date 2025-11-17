@@ -1,19 +1,4 @@
-.grid-container {
-  display: grid;
-  gap: 1px;
-}
-
-.grid-row {
-  display: contents;
-}
-
-.grid-cell {
-  width: 5px;
-  height: 5px;
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.grid-cell.alive {
-  background-color: #000;
+canvas {
+  border: 1px solid white;
+  display: block;
 }

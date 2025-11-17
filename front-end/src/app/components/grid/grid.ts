@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpService } from '../../services/httpService';
 import { catchError } from 'rxjs';
 
@@ -9,22 +9,24 @@ import { catchError } from 'rxjs';
   templateUrl: './grid.html',
   styleUrl: './grid.css',
 })
-export class Grid {
+export class Grid implements AfterViewInit {
+  @ViewChild('gridCanvas') gridCanvas!: ElementRef<HTMLCanvasElement>;
+  private ctx!: CanvasRenderingContext2D;
+
   grid = signal<Array<Array<number>>>([]);
   httpService = inject(HttpService);
 
   rows = 50;
   cols = 50;
+  cellSize = 10; // Define cell size for canvas rendering
 
   constructor() {
     this.initializeGrid(this.rows, this.cols);
   }
 
-  get gridStyles() {
-    return {
-      'grid-template-columns': `repeat(${this.cols}, 5px)`,
-      'grid-template-rows': `repeat(${this.rows}, 5px)`,
-    };
+  ngAfterViewInit(): void {
+    this.ctx = this.gridCanvas.nativeElement.getContext('2d')!;
+    this.drawGrid();
   }
 
   initializeGrid(rows: number, cols: number): void {
@@ -40,6 +42,7 @@ export class Grid {
       )
       .subscribe((data: number[][]) => {
         this.grid.set(data);
+        this.drawGrid();
       });
   }
 
@@ -56,6 +59,25 @@ export class Grid {
         this.rows = data.length;
         this.cols = data[0].length;
         this.grid.set(data);
+        this.drawGrid();
       });
+  }
+
+  private drawGrid(): void {
+    if (!this.ctx) return;
+
+    this.gridCanvas.nativeElement.width = this.cols * this.cellSize;
+    this.gridCanvas.nativeElement.height = this.rows * this.cellSize;
+
+    this.ctx.clearRect(0, 0, this.gridCanvas.nativeElement.width, this.gridCanvas.nativeElement.height);
+
+    this.grid().forEach((row, i) => {
+      row.forEach((cell, j) => {
+        this.ctx.fillStyle = cell === 1 ? '#333' : 'white';
+        this.ctx.strokeStyle = 'white';
+        this.ctx.fillRect(j * this.cellSize, i * this.cellSize, this.cellSize, this.cellSize);
+        this.ctx.strokeRect(j * this.cellSize, i * this.cellSize, this.cellSize, this.cellSize);
+      });
+    });
   }
 }
