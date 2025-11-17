@@ -16,8 +16,8 @@ export class Grid implements AfterViewInit {
   grid = signal<Array<Array<number>>>([]);
   httpService = inject(HttpService);
 
-  rows = 50;
-  cols = 50;
+  rows = 30;
+  cols = 30;
   cellSize = 10; // Define cell size for canvas rendering
 
   constructor() {
@@ -66,15 +66,15 @@ export class Grid implements AfterViewInit {
   private drawGrid(): void {
     if (!this.ctx) return;
 
-    this.gridCanvas.nativeElement.width = this.cols * this.cellSize;
-    this.gridCanvas.nativeElement.height = this.rows * this.cellSize;
+    this.gridCanvas.nativeElement.height = this.grid().length * this.cellSize;
+    this.gridCanvas.nativeElement.width = this.grid()[0].length * this.cellSize;
 
     this.ctx.clearRect(0, 0, this.gridCanvas.nativeElement.width, this.gridCanvas.nativeElement.height);
 
     this.grid().forEach((row, i) => {
       row.forEach((cell, j) => {
         this.ctx.fillStyle = cell === 1 ? '#333' : 'white';
-        this.ctx.strokeStyle = 'white';
+        this.ctx.strokeStyle = '#f1f1f1ff';
         this.ctx.fillRect(j * this.cellSize, i * this.cellSize, this.cellSize, this.cellSize);
         this.ctx.strokeRect(j * this.cellSize, i * this.cellSize, this.cellSize, this.cellSize);
       });

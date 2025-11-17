@@ -35,7 +35,7 @@ export class App {
     this.isRunning.set(true);
     this.intervalId = setInterval(() => {
       this.gridComponent.nextGeneration();
-    }, 500);
+    }, 250);
   }
 
   onStop(): void {

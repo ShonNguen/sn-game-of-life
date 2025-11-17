@@ -1,13 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  generateGrid(x: number, y: number) {
+  generateGrid(rows: number, cols: number) {
     const result: number[][] = [];
 
-    for (let i = 0; i < x; i++) {
+    for (let i = 0; i < rows; i++) {
       const row: number[] = [];
-      for (let j = 0; j < y; j++) {
+      for (let j = 0; j < cols; j++) {
         row.push(Math.random() < 0.5 ? 0 : 1);
       }
       result.push(row);
@@ -16,51 +16,68 @@ export class AppService {
     return result;
   }
 
-  generateExpansion(generatedGrid: number[][], expansionValue: number) {
-    const gridX = generatedGrid.length;
-    const gridY = generatedGrid[0].length;
+  generateExpansion(originalGrid: number[][]) {
+    const gridCols = originalGrid[0].length;
 
-    if (expansionValue < 1) {
-      throw new BadRequestException(`expansionValue(${expansionValue}) should be more than one`);
+    let newGrid: number[][] = [...originalGrid.map((row) => [...row])];
+    const shouldExpandTop = originalGrid[0].includes(1);
+    const shouldExpandBot = originalGrid[0].includes(1);
+
+    if (shouldExpandTop) {
+      newGrid.unshift(new Array(gridCols).fill(0));
+    }
+    if (shouldExpandBot) {
+      newGrid.push(new Array(gridCols).fill(0));
     }
 
-    const x = generatedGrid.length + 2 * expansionValue;
-    const y = generatedGrid[0].length + 2 * expansionValue;
-    const result: number[][] = [];
+    const shouldExpandLeft = originalGrid.some((row) => row[0] === 1);
+    const shouldExpandRight = originalGrid.some((row) => row[gridCols - 1] === 1);
 
-    for (let i = 0; i < x; i++) {
-      const row: number[] = [];
-      for (let j = 0; j < y; j++) {
-        if (i >= expansionValue && i < gridX + expansionValue && j >= expansionValue && j < gridY + expansionValue) {
-          row.push(generatedGrid[i - expansionValue][j - expansionValue]);
-          continue;
-        }
-
-        row.push(0);
-      }
-      result.push(row);
+    if (shouldExpandLeft) {
+      newGrid = newGrid.map((row) => [0, ...row]);
+    }
+    if (shouldExpandRight) {
+      newGrid = newGrid.map((row) => [...row, 0]);
     }
 
-    return result;
+    return newGrid;
   }
 
-  //TODO: move to utils?
-  cellEvaluation(cellX: number, cellY: number, grid: number[][]) {
+  nextGeneration(grid: number[][]): number[][] {
+    const originalGrid = this.generateExpansion(grid);
+    const originalGridRows = originalGrid.length;
+    const originalGridCols = originalGrid[0].length;
+
+    const nextGrid: number[][] = [];
+
+    for (let i = 0; i < originalGridRows; i++) {
+      const newRow: number[] = [];
+      for (let j = 0; j < originalGridCols; j++) {
+        const newCellValue = this.cellEvaluation(i, j, originalGrid);
+        newRow.push(newCellValue);
+      }
+      nextGrid.push(newRow);
+    }
+
+    return nextGrid;
+  }
+
+  cellEvaluation(cellRow: number, cellCol: number, grid: number[][]) {
     // 1. Any live cell with fewer than two live neighbors dies, as if by under-population
     // 2. Any live cell with two or three live neighbors lives on to the next generation.
     // 3. Any live cell with more than three live neighbors dies, as if by overpopulation.
     // 4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
-    const cellValue = grid[cellX][cellY];
+    const cellValue = grid[cellRow][cellCol];
 
     // calculate the sum of all neighbors
     let sum = 0;
     const numRows = grid.length;
     const numCols = grid[0].length;
-    for (let x = cellX - 1; x <= cellX + 1; x++) {
-      for (let y = cellY - 1; y <= cellY + 1; y++) {
-        if (x === cellX && y === cellY) continue;
-        if (x >= 0 && x < numRows && y >= 0 && y < numCols) {
-          sum += grid[x][y];
+    for (let row = cellRow - 1; row <= cellRow + 1; row++) {
+      for (let col = cellCol - 1; col <= cellCol + 1; col++) {
+        if (row === cellRow && col === cellCol) continue;
+        if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
+          sum += grid[row][col];
         }
       }
     }
@@ -74,40 +91,5 @@ export class AppService {
     }
 
     return 0;
-  }
-
-  //TODO: move to utils?
-  shouldExpand(grid: number[][]): boolean {
-    const lastRow = grid.length - 1;
-    const lastCol = grid[0].length - 1;
-
-    for (let i = 0; i < grid.length; i++) {
-      if (grid[i][0] === 1 || grid[i][lastCol] === 1) return true;
-    }
-
-    for (let j = 0; j < grid[0].length; j++) {
-      if (grid[0][j] === 1 || grid[lastRow][j] === 1) return true;
-    }
-
-    return false;
-  }
-
-  nextGeneration(grid: number[][]): number[][] {
-    const originalGrid = this.shouldExpand(grid) ? this.generateExpansion(grid, 1) : grid;
-    const x = originalGrid.length;
-    const y = originalGrid[0].length;
-
-    const nextGrid: number[][] = [];
-
-    for (let i = 0; i < x; i++) {
-      const newRow: number[] = [];
-      for (let j = 0; j < y; j++) {
-        const newCellValue = this.cellEvaluation(i, j, originalGrid);
-        newRow.push(newCellValue);
-      }
-      nextGrid.push(newRow);
-    }
-
-    return nextGrid;
   }
 }
