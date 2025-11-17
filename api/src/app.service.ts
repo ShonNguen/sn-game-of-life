@@ -17,11 +17,12 @@ export class AppService {
   }
 
   generateExpansion(originalGrid: number[][]) {
+    const gridRows = originalGrid.length;
     const gridCols = originalGrid[0].length;
 
     let newGrid: number[][] = [...originalGrid.map((row) => [...row])];
     const shouldExpandTop = originalGrid[0].includes(1);
-    const shouldExpandBot = originalGrid[0].includes(1);
+    const shouldExpandBot = originalGrid[gridRows - 1].includes(1);
 
     if (shouldExpandTop) {
       newGrid.unshift(new Array(gridCols).fill(0));
